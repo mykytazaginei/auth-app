@@ -5,12 +5,28 @@ import { useRouter } from "next/navigation";
 import { Axios } from "axios";
 
 export default function SingupPage() {
+  const router = useRouter();
   const [user, setUser] = React.useState({
     email: "",
     password: "",
     username: "",
   });
+
+  const [buttonDisable, setButtonDisable] = React.useState(false);
+
   const onSigup = async () => {};
+
+  React.useEffect(() => {
+    if (
+      user.email.length > 0 &&
+      user.password.length > 0 &&
+      user.username.length > 0
+    ) {
+      setButtonDisable(false);
+    } else {
+      setButtonDisable(true);
+    }
+  }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -27,7 +43,7 @@ export default function SingupPage() {
       />
       <label htmlFor="email">Email</label>
       <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
         id="email"
         type="email"
         value={user.email}
@@ -36,7 +52,7 @@ export default function SingupPage() {
       />
       <label htmlFor="password">Password</label>
       <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
         id="password"
         type="password"
         value={user.password}
@@ -45,11 +61,11 @@ export default function SingupPage() {
       />
       <button
         onClick={onSigup}
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
       >
-        SignUp
+        {buttonDisable ? "No signup" : "Signup"}
       </button>
-      <Link href='/login'>Visit LogIn page</Link>
+      <Link href="/login">Visit LogIn page</Link>
     </div>
   );
 }
