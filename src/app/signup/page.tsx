@@ -2,7 +2,8 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Axios } from "axios";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function SingupPage() {
   const router = useRouter();
@@ -14,7 +15,20 @@ export default function SingupPage() {
 
   const [buttonDisable, setButtonDisable] = React.useState(false);
 
-  const onSigup = async () => {};
+  const [loading, setLoading] = React.useState(false);
+
+  const onSigup = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/users/signup", user);
+      console.log("Singup success", response.data);
+      router.push("/login");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   React.useEffect(() => {
     if (
@@ -30,7 +44,7 @@ export default function SingupPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>SignUp</h1>
+      <h1>{loading ? "Processing" : "Signup"}</h1>
       <hr />
       <label htmlFor="username">User name</label>
       <input
